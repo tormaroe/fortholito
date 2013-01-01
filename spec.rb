@@ -102,26 +102,49 @@ EOF
 
   ## ------------------------------------------ IF ELSE THEN
 
-  spec :if, :code => %(
+  spec :if, :expect => [10], :code => <<EOF
     -1 if 10 else 20 then
-  ), :expect => [10]
+EOF
 
-  spec :else, :code => %(
+  spec :else, :expect => [20], :code => <<EOF
     0 if 10 else 20 then
-  ), :expect => [20]
+EOF
 
-  spec :if_with_multiple_instructions, :code => %(
+  spec :if_with_multiple_instructions, :expect => [4], :code => <<EOF
     -1 if 2 2 * else 20 then
-  ), :expect => [4]
+EOF
 
   spec :if__multiline, :expect => [4], :code => <<EOF
-    -1 if 
+    -1 if
           2 2 * 
        else 
           20 
        then
 EOF
 
+  spec :nested_if, :expect => [40], :code => <<EOF
+    0 0 
+       if 
+          10 
+       else 
+          if
+              if
+                  20  \\ I THINK REGEX IS A BAD IDEA HERE...
+              else     \\ GO WITH A SPECIAL TOKENIZER FOR THE IF
+                  30
+              then
+          else
+              40
+          then 
+       then
+EOF
+
+  ## ------------------------------------------ IF ELSE THEN
+
+#  spec :defining_word, :expect => [3], :code => <<EOF
+#    : plusplus + + ;
+#    1 1 1 plusplus
+#EOF
 
   # TODO: : ; . .s cr space spaces alias bye
   # TODO: \ (skip rest of line)

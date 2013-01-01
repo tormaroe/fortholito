@@ -1,50 +1,72 @@
 
+module FortholitoExtensions
+  def defword name, action
+    @dictionary ||= {}
+    @dictionary[name] = action
+  end
+  def execute_word word
+    action = @dictionary[word]
+    raise "Word '#{word}' undefined!" unless action
+    action.call
+  end
+end
+
+module FortholitoVocabulary
+  def initialize_vocabulary
+    defword '+',    Proc.new { push pop + pop }
+    defword '-',    Proc.new { push pop - pop }
+    defword '*',    Proc.new { push pop * pop }
+    defword '/',    Proc.new { push pop / pop }
+    defword 'mod',  Proc.new { push pop % pop }
+
+    defword '=', Proc.new { push bool2flag pop == pop }
+    defword '<', Proc.new { push bool2flag pop > pop  }
+    defword '>', Proc.new { push bool2flag pop < pop  }
+
+    defword 'or', Proc.new {
+      a, b = pop, pop
+      push bool2flag (a == Fortholito::TRUE_FLAG or b == Fortholito::TRUE_FLAG) 
+    }
+    defword 'and', Proc.new {
+      a, b = pop, pop
+      push bool2flag (a == Fortholito::TRUE_FLAG and b == Fortholito::TRUE_FLAG) 
+    }
+
+    defword 'depth',  Proc.new { push @stack.size }
+    defword 'drop',   Proc.new { pop }
+    defword 'dup',    Proc.new { push @stack.last }
+    defword 'swap',   Proc.new {
+      a, b = pop, pop
+      push a
+      push b
+    }
+
+  end
+end
+
 class Fortholito
+  include FortholitoExtensions
+  include FortholitoVocabulary
 
   TRUE_FLAG = -1
   FALSE_FLAG = 0
-  
+
   def initialize
     @debug = false
     @stack = []
     @rules = {
-      /^(?:\-){0,1}\d+\.\d+/   => Proc.new {|token| push token.to_f },
-      /^(?:\-){0,1}\d+/        => Proc.new {|token| push token.to_i },
+      /^(?:\-){0,1}\d+\.\d+/    => Proc.new {|token| push token.to_f },
+      /^(?:\-){0,1}\d+/         => Proc.new {|token| push token.to_i },
       
-      /^\+/       => Proc.new {|token| push pop + pop },
-      /^-/        => Proc.new {|token| push pop - pop },
-      /^\*/       => Proc.new {|token| push pop * pop },
-      /^\//       => Proc.new {|token| push pop / pop },
-      /^mod/        => Proc.new {|token| push pop % pop },
+      /^\\ .*\n/                => Proc.new {|token| nil },
+      /^\\ .*$/                 => Proc.new {|token| nil },
 
-      /^=/        => Proc.new {|token| push bool2flag pop == pop },
-      /^</        => Proc.new {|token| push bool2flag pop > pop },
-      /^>/        => Proc.new {|token| push bool2flag pop < pop },
+      /^[^ \n]+/                => Proc.new {|token| execute_word token },
       
-      /^or/       => Proc.new {|token| 
-                                a, b = pop, pop
-                                push bool2flag (a == TRUE_FLAG or b == TRUE_FLAG) 
-                              },
-      /^and/      => Proc.new {|token| 
-                                a, b = pop, pop
-                                push bool2flag (a == TRUE_FLAG and b == TRUE_FLAG) 
-                              },
-
-      /^depth/    => Proc.new {|token| push @stack.size },
-      /^drop/     => Proc.new {|token| pop },
-      /^dup/      => Proc.new {|token| push @stack.last },
-      /^swap/     => Proc.new {|token| 
-                                a, b = pop, pop
-                                push a  ; push b
-                              },
-
-      /^(if (.+) else (.+) then)/         => Proc.new {|token| :if },
-
-      /^\\ .*\n/    => Proc.new {|token| nil },
-      /^\\ .*$/     => Proc.new {|token| nil },
-      /^\n+/        => Proc.new {|token| nil },
-      /^ +/       => Proc.new {|token| nil }
+      /^\n+/                    => Proc.new {|token| nil },
+      /^ +/                     => Proc.new {|token| nil }
     }
+    initialize_vocabulary
   end
 
   def push x ; @stack << x ; end
@@ -69,11 +91,11 @@ class Fortholito
           dbg "---->CALLING #{action.inspect}"
           result = action.call match[0]
 
-          if result.class == ::Symbol
-            code = send result, match, code
-          else
+          #if result.class == ::Symbol
+          #  code = send result, match, code
+          #else
             code = code[match[0].length..-1]
-          end
+          #end
 
           dbg "---->CODE = #{code.inspect}"
           token_recognized = true
@@ -89,15 +111,4 @@ class Fortholito
   def dbg x
     puts x if @debug
   end
-
-  def if match, code
-    puts "::IF:: #{match.inspect}"
-    if pop == TRUE_FLAG
-      self.eval match[0][1]
-    else
-      self.eval match[0][2]
-    end
-    code[match[0][0].length..-1]
-  end
-
 end
