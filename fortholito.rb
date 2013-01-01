@@ -1,3 +1,4 @@
+require "continuation"
 
 module FortholitoExtensions
   def defword name, action
@@ -41,6 +42,21 @@ module FortholitoVocabulary
       push b
     }
 
+    @if_stack = []
+    @supressing_state = false
+
+    defword 'if', Proc.new {
+      @if_stack << pop == Fortholito::TRUE_FLAG
+      @supressing_state = (@if_stack.last == false)
+    }
+
+    defword 'else', Proc.new { 
+      @supressing_state = @if_stack.last
+    } 
+    defword 'then', Proc.new { 
+      @if_stack.pop
+      @supressing_state = false
+    } 
   end
 end
 
@@ -69,8 +85,8 @@ class Fortholito
     initialize_vocabulary
   end
 
-  def push x ; @stack << x ; end
-  def pop    ; @stack.pop  ; end
+  def push x ; @stack << x unless @supressing_state ; end
+  def pop    ; @stack.pop unless @supressing_state  ; end
 
   def bool2flag b
     return TRUE_FLAG if b
@@ -79,33 +95,32 @@ class Fortholito
 
   def eval code
     dbg "\n->EVAL #{code.inspect}"
-    while code.length > 0
-      token_recognized = false
-      @rules.each do |regex, action|
-        
-        dbg "--->USING RULE #{regex}"
-        match = code.scan regex
-        dbg "--->MATCH = " + match.inspect
-
-        if match.size > 0
-          dbg "---->CALLING #{action.inspect}"
-          result = action.call match[0]
-
-          #if result.class == ::Symbol
-          #  code = send result, match, code
-          #else
-            code = code[match[0].length..-1]
-          #end
-
-          dbg "---->CODE = #{code.inspect}"
-          token_recognized = true
-          break
-        end
-      end
-      raise "SYNTAX ERROR at #{code.inspect}" unless token_recognized
-    end
+    code = eval_next code while code.length > 0
     dbg "->EVAL DONE\n"
     return @stack
+  end
+
+  def eval_next code, supress=false
+    token_recognized = false
+    @rules.each do |regex, action|
+      
+      dbg "--->USING RULE #{regex}"
+      match = code.scan regex
+      dbg "--->MATCH = " + match.inspect
+
+      if match.size > 0
+        dbg "---->CALLING #{action.inspect}"
+
+        action.call match[0]
+        code = code[match[0].length..-1]
+
+        dbg "---->CODE = #{code.inspect}"
+        token_recognized = true
+        break
+      end
+    end
+    raise "SYNTAX ERROR at #{code.inspect}" unless token_recognized
+    return code
   end
 
   def dbg x
