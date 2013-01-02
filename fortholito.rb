@@ -1,10 +1,18 @@
-require "./fortholito/lexer"
-require "./fortholito/parser"
-require "./fortholito/vocabulary"
-require "./fortholito/evaluator"
-require "./Fortholito/repl"
-
 module Fortholito
+
+  VERSION = '0.2'
+
+  def self.load_dependencies deps
+    dir = File.join File.dirname(__FILE__), "fortholito"
+    deps.each {|d| require File.join(dir, d) }
+  end
+
+  load_dependencies %w(lexer 
+                       parser 
+                       vocabulary 
+                       evaluator 
+                       repl)
+  
   class Runtime
     def initialize
       @evaluator = Evaluator.new
@@ -25,14 +33,19 @@ module Fortholito
       @evaluator.stack
     end
   end
-end
 
+  
+  ## ------------------------------------------------- MAIN
 
-if __FILE__ == $PROGRAM_NAME
-  if ARGV.size == 0
-    puts "FORTHolito REPL"
-    Fortholito::Repl.new.run
-  else
-    raise "Args not implemented yet"
+  if __FILE__ == $PROGRAM_NAME
+    if ARGV.size == 0
+      repl = Repl.new Runtime.new, 
+        :prompt => '~> '
+      repl.run
+    else
+      raise "Args not implemented yet"
+    end
   end
 end
+
+

@@ -1,13 +1,19 @@
 module Fortholito
   class Repl
     
-    def initialize
-      @runtime = Runtime.new
+    def initialize runtime, options = {}
+      @runtime = runtime
+      @prompt = options[:prompt] || "FORTH> "
+      splash
       loop { eval read ; print }
     end
 
+    def splash
+      puts "Welcome to FORTHolito version #{VERSION} by @tormaroe"
+    end
+
     def read
-      Kernel.print "$ "
+      Kernel.print @prompt
       gets.chomp
     end
 
