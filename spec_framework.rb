@@ -3,7 +3,7 @@ require "./fortholito.rb"
 module Specification
   def spec name, args
     define_method "specmethod_#{name}" do
-      forth = Fortholito.new
+      forth = Fortholito::Runtime.new
       result = forth.eval args[:code]
       if result == args[:expect]
         puts "  passed : #{name}"

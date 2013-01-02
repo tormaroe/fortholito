@@ -1,20 +1,21 @@
 module Fortholito
+  TRUE_FLAG = -1
+  FALSE_FLAG = 0
+
   class Evaluator
+    include Vocabulary
     attr_reader :stack
     def initialize
       @stack = []
-      @dictionary = {}
-
-      @dictionary["+"] = Proc.new { push pop + pop }
+      initialize_vocabulary
     end
 
     def push x ; @stack.push x ; end
     def pop    ; @stack.pop    ; end
     
-    def call_word word
-      action = @dictionary[word]
-      raise "Word '#{word}' undefined!" unless action
-      action.call
+    def bool2flag b
+      return TRUE_FLAG if b
+      return FALSE_FLAG
     end
 
     def execute ast
