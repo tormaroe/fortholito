@@ -40,6 +40,8 @@ module Fortholito
         push b
       }
 
+      defword 'bye',    Proc.new { exit 0 }
+
     end
   end
 end
