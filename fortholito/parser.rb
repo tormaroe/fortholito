@@ -12,8 +12,11 @@ module Fortholito
 
     def expression
       c = current
-      if c.type == TYPE_FLOAT or c.type == TYPE_INT or c.type == TYPE_WORD
+      if c.type == TYPE_FLOAT or c.type == TYPE_INT
         @ast.push PushExpression.new c
+        consume
+      elsif c.type == TYPE_WORD
+        @ast.push CallWordExpression.new c
         consume
       end
     end
@@ -35,7 +38,21 @@ module Fortholito
     def initialize token
       @token = token
     end
+    def value
+      @token.text
+    end
   end
 
-  class PushExpression < Expression; end
+  class PushExpression < Expression 
+    def value
+      if @token.type == TYPE_INT
+        @token.text.to_i
+      elsif @token.type == TYPE_FLOAT
+        @token.text.to_f
+      else
+        super
+      end
+    end
+  end
+  class CallWordExpression < Expression; end
 end
