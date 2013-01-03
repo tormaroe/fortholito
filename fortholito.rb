@@ -14,6 +14,10 @@ module Fortholito
                        evaluator 
                        repl)
   
+  @showstack = false
+  def self.showstack    ; @showstack     ; end
+  def self.showstack= b ; @showstack = b ; end
+
   class Runtime
     def initialize
       @evaluator = Evaluator.new

@@ -22,7 +22,7 @@ module Fortholito
     end
 
     def print
-      p @runtime.stack
+      p @runtime.stack if Fortholito.showstack
     end
 
     def loop 

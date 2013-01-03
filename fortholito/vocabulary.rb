@@ -59,6 +59,8 @@ module Fortholito
       defword 'cr',      lambda { puts }
       defword 'space',      lambda { print " " }
 
+      defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
+
       defword 'bye',    lambda { exit 0 }
 
     end
