@@ -1,5 +1,9 @@
 
-\ FORTHolito core words
+\ -----------------------------------------
+\ --------- FORTHolito core words ---------
+\ -----------------------------------------
+
+\ ==================== STANDARD FORTH WORDS
 
 : noop ( -- ) ;
 
@@ -33,11 +37,17 @@
 : 0>= ( n -- flag ) 0 >= ;
 : 0>  ( n -- flag ) 0 >  ;
 
+: nip  ( a b -- b ) swap drop ;
+: tuck ( a b -- b a b ) swap over ; 
+: 2dup ( a b -- a b a b ) over over ;
+: 2drop ( a b -- ) drop drop ;
+: -rot ( a b c -- c a b ) rot rot ;
+
 : between  ( n low high -- flag )  \ True if low <= n <= high
   rot dup               ( low high n n )
   rot                   ( low n n high )
   <=                    ( low n flag   )
-  rot rot               ( flag low n   )
+  -rot                  ( flag low n   )
   <=                    ( flag flag    )
   and                   ( flag         )
 ;
@@ -45,7 +55,7 @@
   rot dup               ( low high n n )
   rot                   ( low n n high )
   <                     ( low n flag   )
-  rot rot               ( flag low n   )
+  -rot                  ( flag low n   )
   <=                    ( flag flag    )
   and                   ( flag         )
 ;
@@ -60,7 +70,16 @@
   dup 0< if negate then
 ;
 
-: nip  ( a b -- b ) swap drop ;
-: tuck ( a b -- b a b ) swap over ; 
-: 2dup ( a b -- a b a b ) over over ;
-: 2drop ( a b -- ) drop drop ;
+
+\ =================== FORTHolito INVENTIONS
+
+: push-range ( from to -- [n] )
+    2dup                   ( from to from to ) 
+    <> if                  ( from to         )
+         2dup drop         ( from to from    )
+         1+ swap           ( from from+1 to  )
+         push-range        \   .. recur ..
+       else
+         2drop             ( [from..to] to to -- [from..to] )
+       then
+;
