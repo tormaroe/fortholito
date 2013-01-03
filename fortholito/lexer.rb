@@ -1,5 +1,6 @@
 module Fortholito
 
+  TYPE_STRING = :string
   TYPE_FLOAT = :float
   TYPE_INT = :int
   TYPE_WORD = :word
@@ -17,10 +18,12 @@ module Fortholito
       @tokens = []
 
       @tokenizers = {
+        /\A\"(?:[^\"\\]*(?:\\.[^\"\\]*)*)\"/   => TYPE_STRING,
+        /\A\([^\(\)]*\)/   => :whitespace, # comment
         /\A(?:\-){0,1}\d+\.\d+(?:$|[ \n]+)/    => TYPE_FLOAT,
         /\A(?:\-){0,1}\d+(?:$|[ \n]+)/         => TYPE_INT,
-        /\A\\ .*\n+/               => :whitespace, # comments
-        /\A\\ .*$/                 => :whitespace, # comments
+        /\A\\ .*\n+/               => :whitespace, # comment
+        /\A\\ .*$/                 => :whitespace, # comment
         /\A:[ \n]+/                => TYPE_WORD_DEFINITION,
         /\A;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
         /\A[^ \n]+/                => TYPE_WORD,
