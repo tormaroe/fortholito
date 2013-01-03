@@ -17,15 +17,15 @@ module Fortholito
       @tokens = []
 
       @tokenizers = {
-        /^(?:\-){0,1}\d+\.\d+/    => TYPE_FLOAT,
-        /^(?:\-){0,1}\d+/         => TYPE_INT,
-        /^\\ .*\n/                => :whitespace, # comments
-        /^\\ .*$/                 => :whitespace, # comments
-        /^:[ \n]+/                => TYPE_WORD_DEFINITION,
-        /^;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
-        /^[^ \n]+/                => TYPE_WORD,
-        /^\n+/                    => :whitespace,
-        /^ +/                     => :whitespace
+        /\A(?:\-){0,1}\d+\.\d+(?:$|[ \n]+)/    => TYPE_FLOAT,
+        /\A(?:\-){0,1}\d+(?:$|[ \n]+)/         => TYPE_INT,
+        /\A\\ .*\n+/               => :whitespace, # comments
+        /\A\\ .*$/                 => :whitespace, # comments
+        /\A:[ \n]+/                => TYPE_WORD_DEFINITION,
+        /\A;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
+        /\A[^ \n]+/                => TYPE_WORD,
+        /\A\n+/                    => :whitespace,
+        /\A +/                     => :whitespace
       }
     end
     def tokenize

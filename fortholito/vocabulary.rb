@@ -3,7 +3,8 @@ module Fortholito
     def defword name, action
       @dictionary ||= {}
       @dictionary[name] = action
-    end
+    end 
+
     def call_word word
       action = @dictionary[word]
       raise "Word '#{word}' undefined!" unless action
@@ -12,35 +13,35 @@ module Fortholito
 
     def initialize_vocabulary
 
-      defword '+',    Proc.new { push pop + pop }
-      defword '-',    Proc.new { push pop - pop }
-      defword '*',    Proc.new { push pop * pop }
-      defword '/',    Proc.new { push pop / pop }
-      defword 'mod',  Proc.new { push pop % pop }
+      defword '+',    lambda { push pop + pop }
+      defword '-',    lambda { push pop - pop }
+      defword '*',    lambda { push pop * pop }
+      defword '/',    lambda { push pop / pop }
+      defword 'mod',  lambda { push pop % pop }
 
-      defword '=', Proc.new { push bool2flag pop == pop }
-      defword '<', Proc.new { push bool2flag pop > pop  }
-      defword '>', Proc.new { push bool2flag pop < pop  }
+      defword '=', lambda { push bool2flag pop == pop }
+      defword '<', lambda { push bool2flag pop > pop  }
+      defword '>', lambda { push bool2flag pop < pop  }
 
-      defword 'or', Proc.new {
+      defword 'or', lambda {
         a, b = pop, pop
         push bool2flag (a == Fortholito::TRUE_FLAG or b == Fortholito::TRUE_FLAG) 
       }
-      defword 'and', Proc.new {
+      defword 'and', lambda {
         a, b = pop, pop
         push bool2flag (a == Fortholito::TRUE_FLAG and b == Fortholito::TRUE_FLAG) 
       }
 
-      defword 'depth',  Proc.new { push @stack.size }
-      defword 'drop',   Proc.new { pop }
-      defword 'dup',    Proc.new { push @stack.last }
-      defword 'swap',   Proc.new {
+      defword 'depth',  lambda { push @stack.size }
+      defword 'drop',   lambda { pop }
+      defword 'dup',    lambda { push @stack.last }
+      defword 'swap',   lambda {
         a, b = pop, pop
         push a
         push b
       }
 
-      defword 'bye',    Proc.new { exit 0 }
+      defword 'bye',    lambda { exit 0 }
 
     end
 

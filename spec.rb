@@ -174,7 +174,7 @@ EOF
   # xor
   #   max / min
   # TODO in Fortholito:
-  # 0< 0= 0> <= >= <> true false 1+ 1- 2* 2+ 2/ abs between within negate nip not over rot tuck
+  # 0< 0= 0> <= >= <> 1- 2* 2+ 2/ abs between within negate nip not over rot tuck
 end
 
 FortholitoSpecification.new.execute

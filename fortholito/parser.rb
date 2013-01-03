@@ -24,7 +24,7 @@ module Fortholito
       
       elsif c.type == TYPE_WORD_DEFINITION
         consume # :
-        raise "':' must be followed by a word" unless current.type == TYPE_WORD
+        raise "':' must be followed by a word (was #{current.inspect})" unless current.type == TYPE_WORD
         definition = WordDefinitionExpression.new current
         @parser_stack.push definition
         consume # word

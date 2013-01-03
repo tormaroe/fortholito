@@ -30,15 +30,15 @@ module Fortholito
         call_word expression.value
 
       elsif expression.class == WordDefinitionExpression
-        define_word expression
+        forth_define_word expression
 
       else
         raise "Don't know how to evaluate #{expression.inspect}"
       end
     end
 
-    def define_word definition
-      defword definition.value, Proc.new {
+    def forth_define_word definition
+      defword definition.value, lambda {
         definition.expressions.each {|e| evaluate e }
       }
     end

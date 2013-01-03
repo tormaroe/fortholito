@@ -1,10 +1,11 @@
 module Fortholito
 
   VERSION = '0.2'
+  
+  LIBDIR = File.join File.dirname(__FILE__), "fortholito"
 
   def self.load_dependencies deps
-    dir = File.join File.dirname(__FILE__), "fortholito"
-    deps.each {|d| require File.join(dir, d) }
+    deps.each {|d| require File.join(LIBDIR, d) }
   end
 
   load_dependencies %w(lexer 
@@ -16,6 +17,9 @@ module Fortholito
   class Runtime
     def initialize
       @evaluator = Evaluator.new
+
+      core = File.read(File.join(LIBDIR, "core.forth"))
+      eval core
     end
 
     def eval source
