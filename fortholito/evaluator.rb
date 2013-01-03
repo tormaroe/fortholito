@@ -51,8 +51,7 @@ module Fortholito
 
     def do_if_else expression
       truth = flag2bool pop
-      branch = if truth then :when_true else :when_false end
-      expression.send(branch).each {|e| evaluate e }
+      expression.branch(truth).each {|e| evaluate e }
     end
   end
 end

@@ -121,8 +121,12 @@ module Fortholito
       if expr.token.is_word? "else"
         @state = false
       else
-        (if @state then @when_true else @when_false end).push expr
+        branch(@state).push expr
       end
+    end
+    def branch bool
+      return @when_true if bool
+      return @when_false
     end
   end
 end
