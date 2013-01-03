@@ -67,7 +67,17 @@
 
 : negate ( n1 -- n2 ) -1 * ;  \ \\\\\\\ NOT SURE IF THIS IS CORRECT 
 : abs    ( n1 -- n2 )
-  dup 0< if negate then
+    dup 0< if negate then
+;
+: min ( n1 n2 -- n )
+    2dup > if
+        swap
+    then drop
+;
+: max ( n1 n2 -- n )
+    2dup < if
+        swap
+    then drop
 ;
 
 
