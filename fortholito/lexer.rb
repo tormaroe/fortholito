@@ -4,13 +4,11 @@ module Fortholito
   TYPE_FLOAT = :float
   TYPE_INT = :int
   TYPE_WORD = :word
-  TYPE_WORD_DEFINITION = :word_definition
-  TYPE_WORD_DEFINITION_END = :word_definition_end
-  TYPE_IF = :if
-  TYPE_THEN = :then
 
   Token = Struct.new(:text, :type) do
-
+    def is_word? word
+      self.type == TYPE_WORD and self.text.chomp.strip == word
+    end
   end
 
   class Lexer
@@ -24,15 +22,11 @@ module Fortholito
         /\A\([^\(\)]*\)/                       => :whitespace, # comment
         /\A(?:\-){0,1}\d+\.\d+(?:$|[ \n]+)/    => TYPE_FLOAT,
         /\A(?:\-){0,1}\d+(?:$|[ \n]+)/         => TYPE_INT,
-        /\A\\ .*\n+/               => :whitespace, # comment
-        /\A\\ .*$/                 => :whitespace, # comment
-        /\A:[ \n]+/                => TYPE_WORD_DEFINITION,
-        /\A;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
-        /\Aif[ \n]+/               => TYPE_IF,
-        /\Athen(?:$|[ \n]+)/       => TYPE_THEN,
-        /\A[^ \n]+/                => TYPE_WORD,
-        /\A\n+/                    => :whitespace,
-        /\A +/                     => :whitespace
+        /\A\\ .*\n+/                           => :whitespace, # comment
+        /\A\\ .*$/                             => :whitespace, # comment
+        /\A[^ \n]+/                            => TYPE_WORD,
+        /\A\n+/                                => :whitespace,
+        /\A +/                                 => :whitespace
       }
     end
     def tokenize

@@ -1,4 +1,7 @@
 module Fortholito
+  
+  RESERVED_WORDS = %w(if then : ;)
+
   class Parser
     attr_reader :ast
     def initialize tokens
@@ -15,38 +18,44 @@ module Fortholito
     def expression
       c = current
       
-      if c.type == TYPE_FLOAT or c.type == TYPE_INT or c.type == TYPE_STRING
+      if should_just_be_pushed c
         push PushExpression.new c
-        consume
-
-      elsif c.type == TYPE_WORD
-        push CallWordExpression.new c
-        consume
       
-      elsif c.type == TYPE_WORD_DEFINITION
+      elsif c.is_word? ":"
         consume # :
         raise "':' must be followed by a word (was #{current.inspect})" unless current.type == TYPE_WORD
         definition = WordDefinitionExpression.new current
         @parser_stack.push definition
-        consume # word
 
-      elsif c.type == TYPE_WORD_DEFINITION_END
+      elsif c.is_word? ";"
         definition = @parser_stack.pop
         raise "';' must follow a word definition" unless definition.class == WordDefinitionExpression
         push definition
-        consume
 
-      elsif c.type == TYPE_IF
+      elsif c.is_word? "if"
         @parser_stack.push IfElseExpression.new c
-        consume
 
-      elsif c.type == TYPE_THEN
+      elsif c.is_word? "then"
         push @parser_stack.pop
-        consume
       
+      elsif c.type == TYPE_WORD
+        push CallWordExpression.new c
+
       else
         raise "Don't know how to parse #{c.inspect}"
       end
+
+      consume
+    end
+
+    def should_just_be_pushed token
+      token.type == TYPE_FLOAT or
+      token.type == TYPE_INT or
+      (token.type == TYPE_STRING and not_reserved? token)
+    end
+   
+    def not_reserved? token
+      not RESERVED_WORDS.include? token.text.chomp.strip
     end
 
     def push expr
@@ -64,6 +73,8 @@ module Fortholito
       @tokens.size == @index
     end
   end
+
+  ## ------------------------------------------ EXPRESSION CLASSES
 
   class Expression
     attr_reader :token
