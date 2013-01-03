@@ -2,6 +2,7 @@ module Fortholito
   module Vocabulary
     def defword name, action
       @dictionary ||= {}
+      puts "Warning: Existing definition of '#{name}' changed" if @dictionary[name]
       @dictionary[name] = action
     end 
 
@@ -33,13 +34,30 @@ module Fortholito
       }
 
       defword 'depth',  lambda { push @stack.size }
+      defword 'clear',  lambda { @stack = [] }
       defword 'drop',   lambda { pop }
       defword 'dup',    lambda { push @stack.last }
       defword 'swap',   lambda {
-        a, b = pop, pop
+        b, a = pop, pop
+        push b
+        push a
+      }
+      defword 'over',   lambda {
+        b, a = pop, pop
         push a
         push b
+        push a
       }
+      defword 'rot',   lambda {
+        c, b, a = pop, pop, pop
+        push b
+        push c
+        push a
+      }
+
+      defword '.',      lambda { print pop }
+      defword 'cr',      lambda { puts }
+      defword 'space',      lambda { print " " }
 
       defword 'bye',    lambda { exit 0 }
 

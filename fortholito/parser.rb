@@ -9,12 +9,13 @@ module Fortholito
     end
     def build_ast
       expression until eof
+      raise "EOF not expected!" if @parser_stack.size > 1
     end
 
     def expression
       c = current
       
-      if c.type == TYPE_FLOAT or c.type == TYPE_INT
+      if c.type == TYPE_FLOAT or c.type == TYPE_INT or c.type == TYPE_STRING
         push PushExpression.new c
         consume
 
@@ -72,6 +73,8 @@ module Fortholito
         @token.text.to_i
       elsif @token.type == TYPE_FLOAT
         @token.text.to_f
+      elsif @token.type == TYPE_STRING
+        @token.text[1..-2]
       else
         super
       end

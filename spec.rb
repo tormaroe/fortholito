@@ -40,6 +40,18 @@ EOF
     1 2 3 depth
   ), :expect => [1, 2, 3, 3]
 
+  spec :clear, :code => %(
+    1 2 3 clear
+  ), :expect => []
+
+  spec :over, :code => %(
+    1 2 over
+  ), :expect => [1, 2, 1]
+
+  spec :rot, :code => %(
+    1 2 3 rot
+  ), :expect => [2, 3, 1]
+
   ## ------------------------------------------ BOOLEAN LOGIC
 
   spec :or, :code => %(
@@ -166,15 +178,18 @@ EOF
 #    1 1 1 plusplus
 #EOF
 
-  # TODO: : ; . .s cr space spaces alias 
+  # TODO: .s spaces alias 
   # TODO: Looping
+#  Variables: http://wiki.laptop.org/go/Forth_Lesson_6
   # TODO: REPL - words
   # TODO: File words
+#  Multiline input in REPL - listen for error from build_ast
   # TODO: fload, save-forth,
   # xor
   #   max / min
+#   showstack (toggle)
   # TODO in Fortholito:
-  # 0< 0= 0> <= >= <> 2+ abs between within negate nip not over rot tuck
+  # <= >= <> 2+ abs between within not
 end
 
 FortholitoSpecification.new.execute

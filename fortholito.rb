@@ -44,7 +44,7 @@ module Fortholito
   if __FILE__ == $PROGRAM_NAME
     if ARGV.size == 0
       repl = Repl.new Runtime.new, 
-        :prompt => '~> '
+        :prompt => 'ok  '
       repl.run
     else
       raise "Args not implemented yet"

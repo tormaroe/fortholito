@@ -19,7 +19,7 @@ module Fortholito
 
       @tokenizers = {
         /\A\"(?:[^\"\\]*(?:\\.[^\"\\]*)*)\"/   => TYPE_STRING,
-        /\A\([^\(\)]*\)/   => :whitespace, # comment
+        /\A\([^\(\)]*\)/                       => :whitespace, # comment
         /\A(?:\-){0,1}\d+\.\d+(?:$|[ \n]+)/    => TYPE_FLOAT,
         /\A(?:\-){0,1}\d+(?:$|[ \n]+)/         => TYPE_INT,
         /\A\\ .*\n+/               => :whitespace, # comment
