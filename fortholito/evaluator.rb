@@ -10,8 +10,12 @@ module Fortholito
       initialize_vocabulary
     end
 
-    def push x ; @stack.push x ; end
-    def pop    ; @stack.pop    ; end
+    def push x ; @stack.push x ; show_trace ; end
+    def pop    ; x = @stack.pop    ; show_trace ; x ; end
+
+    def show_trace
+      p @stack if Fortholito.stacktrace
+    end
     
     def bool2flag b
       return TRUE_FLAG if b

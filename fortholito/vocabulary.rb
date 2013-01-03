@@ -59,12 +59,16 @@ module Fortholito
       defword 'cr',      lambda { puts }
       defword 'space',      lambda { print " " }
 
+      defword '.s'       , lambda { p @stack }
       defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
+      defword 'stacktrace', lambda { Fortholito.stacktrace = not(Fortholito.stacktrace) }
 
       defword 'help', lambda {
-        [ " SOME USEFULL WORD YOU SHOULD TRY:",
+        [ " SOME USEFULL WORDS YOU SHOULD TRY:",
           "  .           \\ pop and print the top item from the stack",
+          "  .s          \\ display stack once",
           "  showstack   \\ toggle display of stack between commands",
+          "  stacktrace  \\ display all modifications to stack for debugging",
           "  bye         \\ exit REPL" ].
           each {|line| puts line }
       }

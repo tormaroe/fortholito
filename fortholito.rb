@@ -18,6 +18,10 @@ module Fortholito
   def self.showstack    ; @showstack     ; end
   def self.showstack= b ; @showstack = b ; end
 
+  @stacktrace = false
+  def self.stacktrace    ; @stacktrace     ; end
+  def self.stacktrace= b ; @stacktrace = b ; end
+
   class Runtime
     def initialize
       @evaluator = Evaluator.new
