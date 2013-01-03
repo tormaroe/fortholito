@@ -1,7 +1,7 @@
 FORTHolito is
 
 * A programming language
-* .. specifically an implementation of the [FORTH](http://en.wikipedia.org/wiki/Forth_(programming_language)) programming language
+* .. specifically an implementation of the [FORTH](http://en.wikipedia.org/wiki/Forth_%28programming_language%29) programming language
 * .. implemented in Ruby
 * .. because programming is fun
 
