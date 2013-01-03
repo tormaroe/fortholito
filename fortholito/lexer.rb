@@ -29,7 +29,7 @@ module Fortholito
         /\A:[ \n]+/                => TYPE_WORD_DEFINITION,
         /\A;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
         /\Aif[ \n]+/               => TYPE_IF,
-        /\Athen[ \n]+/               => TYPE_THEN,
+        /\Athen(?:$|[ \n]+)/       => TYPE_THEN,
         /\A[^ \n]+/                => TYPE_WORD,
         /\A\n+/                    => :whitespace,
         /\A +/                     => :whitespace

@@ -189,7 +189,7 @@ EOF
   #   max / min
 #   showstack (toggle)
   # TODO in Fortholito:
-  # <= >= <> 2+ abs between within not
+  # 2+ not
 end
 
 FortholitoSpecification.new.execute
