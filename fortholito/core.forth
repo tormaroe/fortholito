@@ -76,7 +76,7 @@
 : push-range ( from to -- [n] )
     2dup                   ( from to from to ) 
     <> if                  ( from to         )
-         2dup drop         ( from to from    )
+         over              ( from to from    )
          1+ swap           ( from from+1 to  )
          push-range        \   .. recur ..
        else
