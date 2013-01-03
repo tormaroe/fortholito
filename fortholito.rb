@@ -26,7 +26,7 @@ module Fortholito
     def initialize
       @evaluator = Evaluator.new
 
-      core = File.read(File.join(LIBDIR, "core.forth"))
+      core = File.read(File.join(LIBDIR, "core.fs"))
       eval core
     end
 

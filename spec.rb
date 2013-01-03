@@ -187,7 +187,6 @@ EOF
   # TODO: fload, save-forth,
   # xor
   #   max / min
-#   showstack (toggle)
   # TODO in Fortholito:
   # 2+ not
 end
