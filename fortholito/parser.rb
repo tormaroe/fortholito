@@ -91,7 +91,7 @@ module Fortholito
       case @token.type
       when TYPE_INT then @token.text.to_i
       when TYPE_FLOAT then @token.text.to_f
-      when TYPE_STRING then @token.text[1..-2]
+      when TYPE_STRING then eval @token.text
       else super
       end
     end
