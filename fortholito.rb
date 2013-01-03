@@ -50,12 +50,16 @@ module Fortholito
   ## ------------------------------------------------- MAIN
 
   if __FILE__ == $PROGRAM_NAME
-    if ARGV.size == 0
-      repl = Repl.new Runtime.new, 
-        :prompt => 'ok  '
+
+    repl = Repl.new Runtime.new, 
+      :prompt => 'ok  '
+
+    if ARGV.size == 0  
       repl.run
     else
-      raise "Args not implemented yet"
+      file = ARGV.shift
+      raise "#{file} is not a file" unless File.exist? file
+      repl.run_with File.read file
     end
   end
 end

@@ -4,7 +4,17 @@ module Fortholito
     def initialize runtime, options = {}
       @runtime = runtime
       @prompt = options[:prompt] || "FORTH> "
-      puts splash
+      @do_splash = true
+    end
+
+    def run_with source
+      @do_splash = false
+      eval source
+      run
+    end
+
+    def run
+      puts splash if @do_splash
       loop { eval read ; print }
     end
 
