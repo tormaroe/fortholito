@@ -100,6 +100,26 @@ EOF
     3 9 mod  3 10 mod
   ), :expect => [0, 1]
 
+  ## ------------------------------------------ WORD DEFINITIONS
+
+  spec :simple_word_definition, :expect => [2], :code => <<EOF
+  : plus + ;
+  1 1
+  plus
+EOF
+
+  spec :longer_word_definition, 
+       :expect => [Fortholito::TRUE_FLAG, Fortholito::FALSE_FLAG], 
+       :code => <<EOF
+  : multiple-of-3?
+      3 swap
+      mod
+      0 =
+  ;
+  9 multiple-of-3?
+  10 multiple-of-3?
+EOF
+
   ## ------------------------------------------ IF ELSE THEN
 
   spec :if, :expect => [10], :code => <<EOF
@@ -146,8 +166,7 @@ EOF
 #    1 1 1 plusplus
 #EOF
 
-  # TODO: : ; . .s cr space spaces alias bye
-  # TODO: \ (skip rest of line)
+  # TODO: : ; . .s cr space spaces alias 
   # TODO: Looping
   # TODO: REPL - words
   # TODO: File words

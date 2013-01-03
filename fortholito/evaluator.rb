@@ -19,13 +19,28 @@ module Fortholito
     end
 
     def execute ast
-      ast.each do |expression|
-        if expression.class == PushExpression
-          push expression.value
-        elsif expression.class == CallWordExpression
-          call_word expression.value
-        end
+      ast.each {|expression| evaluate expression }
+    end
+
+    def evaluate expression
+      if expression.class == PushExpression
+        push expression.value
+      
+      elsif expression.class == CallWordExpression
+        call_word expression.value
+
+      elsif expression.class == WordDefinitionExpression
+        define_word expression
+
+      else
+        raise "Don't know how to evaluate #{expression.inspect}"
       end
+    end
+
+    def define_word definition
+      defword definition.value, Proc.new {
+        definition.expressions.each {|e| evaluate e }
+      }
     end
   end
 end

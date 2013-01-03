@@ -1,7 +1,10 @@
 module Fortholito
+
   TYPE_FLOAT = :float
   TYPE_INT = :int
   TYPE_WORD = :word
+  TYPE_WORD_DEFINITION = :word_definition
+  TYPE_WORD_DEFINITION_END = :word_definition_end
 
   Token = Struct.new(:text, :type) do
 
@@ -18,6 +21,8 @@ module Fortholito
         /^(?:\-){0,1}\d+/         => TYPE_INT,
         /^\\ .*\n/                => :whitespace, # comments
         /^\\ .*$/                 => :whitespace, # comments
+        /^:[ \n]+/                => TYPE_WORD_DEFINITION,
+        /^;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
         /^[^ \n]+/                => TYPE_WORD,
         /^\n+/                    => :whitespace,
         /^ +/                     => :whitespace
