@@ -63,8 +63,15 @@ module Fortholito
       defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
       defword 'stacktrace', lambda { Fortholito.stacktrace = not(Fortholito.stacktrace) }
 
+      defword 'words', lambda {
+        @dictionary.keys.sort.each_slice(4) do |w|
+          puts " " + w.map{|w| w.ljust 18}.join(" ")
+        end
+      }
+
       defword 'help', lambda {
         [ " SOME USEFULL WORDS YOU SHOULD TRY:",
+          "  words       \\ display all words in the vocabulary",
           "  .           \\ pop and print the top item from the stack",
           "  .s          \\ display stack once",
           "  showstack   \\ toggle display of stack between commands",
