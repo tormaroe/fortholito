@@ -88,14 +88,11 @@ module Fortholito
 
   class PushExpression < Expression 
     def value
-      if @token.type == TYPE_INT
-        @token.text.to_i
-      elsif @token.type == TYPE_FLOAT
-        @token.text.to_f
-      elsif @token.type == TYPE_STRING
-        @token.text[1..-2]
-      else
-        super
+      case @token.type
+      when TYPE_INT then @token.text.to_i
+      when TYPE_FLOAT then @token.text.to_f
+      when TYPE_STRING then @token.text[1..-2]
+      else super
       end
     end
   end
@@ -121,14 +118,10 @@ module Fortholito
       @when_true, @when_false = [], []
     end
     def push expr
-      if expr.token.text == "else"
+      if expr.token.is_word? "else"
         @state = false
-        return
-      end
-      if @state
-        @when_true.push expr
       else
-        @when_false.push expr
+        (if @state then @when_true else @when_false end).push expr
       end
     end
   end
