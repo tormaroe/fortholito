@@ -178,7 +178,7 @@ EOF
 #    1 1 1 plusplus
 #EOF
 
-  # TODO: .s spaces alias 
+  # TODO: spaces alias 
   # TODO: Looping
 #  Variables: http://wiki.laptop.org/go/Forth_Lesson_6
   # TODO: REPL - words
