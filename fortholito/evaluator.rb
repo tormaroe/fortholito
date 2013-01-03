@@ -17,6 +17,9 @@ module Fortholito
       return TRUE_FLAG if b
       return FALSE_FLAG
     end
+    def flag2bool f
+      return TRUE_FLAG == f
+    end
 
     def execute ast
       ast.each {|expression| evaluate expression }
@@ -31,6 +34,9 @@ module Fortholito
 
       elsif expression.class == WordDefinitionExpression
         forth_define_word expression
+      
+      elsif expression.class == IfElseExpression
+        do_if_else expression
 
       else
         raise "Don't know how to evaluate #{expression.inspect}"
@@ -41,6 +47,12 @@ module Fortholito
       defword definition.value, lambda {
         definition.expressions.each {|e| evaluate e }
       }
+    end
+
+    def do_if_else expression
+      truth = flag2bool pop
+      branch = if truth then :when_true else :when_false end
+      expression.send(branch).each {|e| evaluate e }
     end
   end
 end

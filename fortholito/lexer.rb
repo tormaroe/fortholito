@@ -6,6 +6,8 @@ module Fortholito
   TYPE_WORD = :word
   TYPE_WORD_DEFINITION = :word_definition
   TYPE_WORD_DEFINITION_END = :word_definition_end
+  TYPE_IF = :if
+  TYPE_THEN = :then
 
   Token = Struct.new(:text, :type) do
 
@@ -26,6 +28,8 @@ module Fortholito
         /\A\\ .*$/                 => :whitespace, # comment
         /\A:[ \n]+/                => TYPE_WORD_DEFINITION,
         /\A;(?:$|[ \n]+)/          => TYPE_WORD_DEFINITION_END,
+        /\Aif[ \n]+/               => TYPE_IF,
+        /\Athen[ \n]+/               => TYPE_THEN,
         /\A[^ \n]+/                => TYPE_WORD,
         /\A\n+/                    => :whitespace,
         /\A +/                     => :whitespace

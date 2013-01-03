@@ -35,6 +35,14 @@ module Fortholito
         raise "';' must follow a word definition" unless definition.class == WordDefinitionExpression
         push definition
         consume
+
+      elsif c.type == TYPE_IF
+        @parser_stack.push IfElseExpression.new c
+        consume
+
+      elsif c.type == TYPE_THEN
+        push @parser_stack.pop
+        consume
       
       else
         raise "Don't know how to parse #{c.inspect}"
@@ -91,6 +99,26 @@ module Fortholito
     end
     def push expr
       @expressions.push expr
+    end
+  end
+
+  class IfElseExpression < Expression
+    attr_reader :when_true, :when_false
+    def initialize token
+      super token
+      @state = true
+      @when_true, @when_false = [], []
+    end
+    def push expr
+      if expr.token.text == "else"
+        @state = false
+        return
+      end
+      if @state
+        @when_true.push expr
+      else
+        @when_false.push expr
+      end
     end
   end
 end
