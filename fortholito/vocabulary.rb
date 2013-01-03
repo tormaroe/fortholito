@@ -61,6 +61,14 @@ module Fortholito
 
       defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
 
+      defword 'help', lambda {
+        [ " SOME USEFULL WORD YOU SHOULD TRY:",
+          "  .           \\ pop and print the top item from the stack",
+          "  showstack   \\ toggle display of stack between commands",
+          "  bye         \\ exit REPL" ].
+          each {|line| puts line }
+      }
+
       defword 'bye',    lambda { exit 0 }
 
     end

@@ -4,12 +4,13 @@ module Fortholito
     def initialize runtime, options = {}
       @runtime = runtime
       @prompt = options[:prompt] || "FORTH> "
-      splash
+      puts splash
       loop { eval read ; print }
     end
 
     def splash
-      puts "Welcome to FORTHolito version #{VERSION} by @tormaroe"
+      "Welcome to FORTHolito version #{VERSION} by @tormaroe\n" +
+        "Type 'help' and hit [ENTER] to get started.."
     end
 
     def read
