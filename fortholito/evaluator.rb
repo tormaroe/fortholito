@@ -25,8 +25,14 @@ module Fortholito
       return TRUE_FLAG == f
     end
 
-    def execute ast
-      ast.each {|expression| evaluate expression }
+    def execute source
+      lexer = Lexer.new source
+      lexer.tokenize
+      
+      parser = Parser.new lexer.tokens
+      parser.build_ast
+      
+      parser.ast.each {|expression| evaluate expression }
     end
 
     def evaluate expression

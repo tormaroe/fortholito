@@ -1,9 +1,12 @@
 module Fortholito
 
+  # "Global" contants about the environment
+  #
   VERSION = '0.2'
-  
   LIBDIR = File.join File.dirname(__FILE__), "fortholito"
 
+  # Require all parts of FORTHolito
+  #
   def self.load_dependencies deps
     deps.each {|d| require File.join(LIBDIR, d) }
   end
@@ -16,6 +19,7 @@ module Fortholito
 
   # "Global" Fortholito-variables used to
   # configure the environment at runtime
+  # 
   class << self
     attr_accessor :showstack, 
                   :stacktrace
@@ -30,13 +34,7 @@ module Fortholito
     end
 
     def eval source
-      lexer = Lexer.new source
-      lexer.tokenize
-      
-      parser = Parser.new lexer.tokens
-      parser.build_ast
-
-      @evaluator.execute parser.ast
+      @evaluator.execute source
       @evaluator.stack
     end
 
