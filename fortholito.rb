@@ -13,14 +13,13 @@ module Fortholito
                        vocabulary 
                        evaluator 
                        repl)
-  
-  @showstack = false
-  def self.showstack    ; @showstack     ; end
-  def self.showstack= b ; @showstack = b ; end
 
-  @stacktrace = false
-  def self.stacktrace    ; @stacktrace     ; end
-  def self.stacktrace= b ; @stacktrace = b ; end
+  # "Global" Fortholito-variables used to
+  # configure the environment at runtime
+  class << self
+    attr_accessor :showstack, 
+                  :stacktrace
+  end
 
   class Runtime
     def initialize
