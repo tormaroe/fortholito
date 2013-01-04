@@ -28,7 +28,6 @@ module Fortholito
   class Runtime
     def initialize
       @evaluator = Evaluator.new
-
       core = File.read(File.join(LIBDIR, "core.fs"))
       eval core
     end
@@ -48,16 +47,15 @@ module Fortholito
 
   if __FILE__ == $PROGRAM_NAME
 
-    repl = Repl.new Runtime.new, 
-      :prompt => 'ok  '
+    repl = Repl.new Runtime.new, :prompt => 'ok  '
 
-    if ARGV.size == 0  
-      repl.run
-    else
+    if ARGV.size > 0
       file = ARGV.shift
       raise "#{file} is not a file" unless File.exist? file
-      repl.run_with File.read file
+      repl.source.push File.read file
     end
+
+    repl.run
   end
 end
 

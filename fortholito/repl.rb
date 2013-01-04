@@ -1,20 +1,22 @@
 module Fortholito
   class Repl
-    
+    attr_reader :source
+
     def initialize runtime, options = {}
       @runtime = runtime
       @prompt = options[:prompt] || "FORTH> "
       @do_splash = true
+      @source = []
     end
-
-    def run_with source
-      @do_splash = false
-      eval source
-      run
-    end
-
+    
     def run
+      @do_splash = @source.size == 0
+      eval @source.shift until @source.size == 0
       puts splash if @do_splash
+      repl
+    end
+
+    def repl
       loop { eval read ; print }
     end
 
