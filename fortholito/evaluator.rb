@@ -1,3 +1,4 @@
+
 module Fortholito
   TRUE_FLAG = -1
   FALSE_FLAG = 0
@@ -48,6 +49,9 @@ module Fortholito
       elsif expression.class == IfElseExpression
         do_if_else expression
 
+      elsif expression.class == LoopExpression
+        do_loop expression
+
       else
         raise "Don't know how to evaluate #{expression.inspect}"
       end
@@ -55,13 +59,27 @@ module Fortholito
 
     def forth_define_word definition
       defword definition.value, lambda {
-        definition.expressions.each {|e| evaluate e }
+        definition.expressions.each {|e| 
+          evaluate e
+        }
       }
     end
 
     def do_if_else expression
       truth = flag2bool pop
       expression.branch(truth).each {|e| evaluate e }
+    end
+
+    def do_loop expression
+      begin
+        expression.code.each do|c|
+          if c.class == Token
+
+          else
+            evaluate c 
+          end
+        end
+      end until flag2bool(pop) 
     end
   end
 end

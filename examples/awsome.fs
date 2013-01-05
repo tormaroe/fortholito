@@ -2,7 +2,7 @@
   \ Demo FORTHolito program /
  \ by @tormaroe - 2013-01-04 /
 
-: y "a" "confusing" "program" ;
+: y  a "confusing"  "program" ;
 : ¤                       " " ;
 : '''     "s"       i       + ;
 : -<>-   true      -x-     +? ;

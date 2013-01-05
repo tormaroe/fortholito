@@ -154,39 +154,55 @@ EOF
        then
 EOF
 
-  spec :nested_if, :expect => [40], :code => <<EOF
+  spec :nested_if, :code => %(
     0 0 
-       if 
+       if              \\ 0 is not true, so will use other branch
           10 
        else 
-          if
+          if           \\ second 0 obviously neither true
               if
-                  20  \\ I THINK REGEX IS A BAD IDEA HERE...
-              else     \\ GO WITH A SPECIAL TOKENIZER FOR THE IF
+                  20  
+              else     
                   30
               then
           else
-              40
+              40       \\ so the answer is here
           then 
        then
-EOF
+  ), 
+  :expect => [40]
 
   ## ------------------------------------------ IF ELSE THEN
 
-#  spec :defining_word, :expect => [3], :code => <<EOF
-#    : plusplus + + ;
-#    1 1 1 plusplus
-#EOF
+  spec :defining_word, 
+    :code => 
+    %( 
+        : plusplus + + ;
+        1 1 1 plusplus
+     ), 
+     :expect => [3]
+
+
+  ## ------------------------------------------ ITERATIONS
+
+  spec :begin_until, :code =>
+  %(
+      5                  \\ ( 5 )
+      begin
+          dup 1- dup     \\ ( 5 4 4 )
+          0=             \\ ( 5 4 flag)
+      until
+  ),
+  :expect => [5, 4, 3, 2, 1, 0]
+
 
   # TODO: spaces alias 
   # TODO: Looping
 #  Variables: http://wiki.laptop.org/go/Forth_Lesson_6
-  # TODO: REPL - words
   # TODO: File words
 #  Multiline input in REPL - listen for error from build_ast
   # TODO: fload, save-forth,
   # xor
-  #   max / min
   # TODO in Fortholito:
   # 2+ not
 end

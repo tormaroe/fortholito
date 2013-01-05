@@ -1,6 +1,6 @@
 module Fortholito
   
-  RESERVED_WORDS = %w(if then : ;)
+  RESERVED_WORDS = %w(if then : ; begin until)
 
   class Parser
     attr_reader :ast
@@ -36,6 +36,14 @@ module Fortholito
         @parser_stack.push IfElseExpression.new c
 
       elsif c.is_word? "then"
+        push @parser_stack.pop
+
+      elsif c.is_word? "begin"
+        iterator = LoopExpression.new c
+        @parser_stack.push iterator
+        
+      elsif c.is_word? "until"
+        push c # just the word?!
         push @parser_stack.pop
       
       elsif c.type == TYPE_WORD
@@ -127,6 +135,17 @@ module Fortholito
     def branch bool
       return @when_true if bool
       return @when_false
+    end
+  end
+
+  class LoopExpression < Expression
+    attr_reader :code
+    def initialize token
+      super token
+      @code = []
+    end
+    def push expr
+      @code.push expr
     end
   end
 end
