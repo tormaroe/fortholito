@@ -71,15 +71,10 @@ module Fortholito
     end
 
     def do_loop expression
-      begin
-        expression.code.each do|c|
-          if c.class == Token
-
-          else
-            evaluate c 
-          end
-        end
-      end until flag2bool(pop) 
+      expression.loop(
+        :evaluate => Proc.new {|e| self.evaluate e},
+        :pop_thruth => Proc.new {self.flag2bool(pop) }
+      )
     end
   end
 end

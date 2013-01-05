@@ -147,5 +147,16 @@ module Fortholito
     def push expr
       @code.push expr
     end
+    def loop args
+      begin
+        @code.each do |expr|
+          if expr.class == Token
+
+          else
+            args[:evaluate].call expr
+          end
+        end
+      end until args[:pop_thruth].call
+    end
   end
 end
