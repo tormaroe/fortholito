@@ -76,7 +76,25 @@ module Fortholito
           "  .s          \\ display stack once",
           "  showstack   \\ toggle display of stack between commands",
           "  stacktrace  \\ display all modifications to stack for debugging",
+          "  help:stack  \\ cheat sheet of stack overations",
           "  bye         \\ exit REPL" ].
+          each {|line| puts line }
+      }
+      
+      defword 'help:stack', lambda {
+        [ " ",
+          " REMOVERS:  drop    ( a   --   )  \\  also: 2drop",
+          "            nip     ( a b -- b )",
+          " ",
+          " ADDERS:    dup     ( a   -- a a )",
+          "            2dup    ( a b -- a b a b )",
+          "            tuck    ( a b -- b a b )",
+          "            over    ( a b -- a b a )",
+          " ",
+          " ROTATORS:  swap    ( a b -- b a )",
+          "            rot     ( a b c -- b c a )",
+          "            -rot    ( a b c -- c a b )",
+          "  " ].
           each {|line| puts line }
       }
 
