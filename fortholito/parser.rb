@@ -1,6 +1,6 @@
 module Fortholito
   
-  RESERVED_WORDS = %w(if then : ; begin until)
+  RESERVED_WORDS = %w(if then : ; begin until repeat)
 
   class Parser
     attr_reader :ast
@@ -42,7 +42,7 @@ module Fortholito
         iterator = LoopExpression.new c
         @parser_stack.push iterator
         
-      elsif c.is_word? "until"
+      elsif c.is_word? "until" or c.is_word? "repeat"
         push c # just the word?!
         push @parser_stack.pop
       
@@ -148,15 +148,33 @@ module Fortholito
       @code.push expr
     end
     def loop args
+      if @code.last.text == "until"
+        loop_begin_until args
+      elsif @code.last.text == "repeat"
+        loop_begin_while_repeat args
+      end
+    end
+    def loop_begin_until args
       begin
         @code.each do |expr|
-          if expr.class == Token
-
-          else
+          unless expr.class == Token
             args[:evaluate].call expr
           end
         end
       end until args[:pop_thruth].call
+    end
+    def loop_begin_while_repeat args
+      while true
+        @code.each do |expr|
+          unless expr.class == Token
+            if expr.value == "while"
+              return unless args[:pop_thruth].call
+            else
+              args[:evaluate].call expr
+            end
+          end
+        end
+      end
     end
   end
 end

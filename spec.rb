@@ -195,6 +195,17 @@ EOF
   ),
   :expect => [5, 4, 3, 2, 1, 0]
 
+  spec :begin_while, :code =>
+  %(
+      5                  \\ ( 5 )
+      begin
+          dup 0<>        \\ ( 5 flag )
+      while
+          dup 1-         \\ ( 5 4 )
+      repeat
+  ),
+  :expect => [5, 4, 3, 2, 1, 0]
+
 
   # TODO: spaces alias 
   # TODO: Looping
