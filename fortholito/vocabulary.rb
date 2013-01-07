@@ -14,10 +14,10 @@ module Fortholito
   end
 
   module Vocabulary
-    def defword name, action
+    def defword name, action, options = {}
       @dictionary ||= {}
       puts "Warning: Existing definition of '#{name}' changed" if @dictionary[name]
-      @dictionary[name] = Word.new name, action
+      @dictionary[name] = Word.new name, action, options
     end 
 
     def call_word word
@@ -136,7 +136,7 @@ module Fortholito
           each {|line| puts line }
       }
 
-      defword 'bye',    lambda { exit 0 }
+      defword 'bye', lambda { exit 0 }, :doc => "Quit REPL"
 
     end
 
