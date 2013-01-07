@@ -27,7 +27,7 @@ module Fortholito
 
     def read
       Kernel.print @prompt
-      gets.chomp
+      STDIN.gets.chomp
     end
 
     def eval input
