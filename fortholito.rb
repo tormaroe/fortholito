@@ -104,7 +104,6 @@ EOF
       repl.source.push code_to_eval
     end
 
-    puts 
     repl.run
   end
 end
