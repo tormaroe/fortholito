@@ -59,6 +59,8 @@ module Fortholito
       defword 'cr',      lambda { puts }
       defword 'space',      lambda { print " " }
 
+      defword 'rand', lambda { push rand pop }
+      
       defword '.s'       , lambda { p @stack }
       defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
       defword 'stacktrace', lambda { Fortholito.stacktrace = not(Fortholito.stacktrace) }
