@@ -59,9 +59,7 @@ module Fortholito
 
     def forth_define_word definition
       defword definition.value, lambda {
-        definition.expressions.each {|e| 
-          evaluate e
-        }
+        definition.expressions.each {|e| evaluate e }
       }
     end
 

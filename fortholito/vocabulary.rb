@@ -1,9 +1,23 @@
 module Fortholito
+
+  class Word
+    def initialize name, action, options = {}
+      @doc = options[:doc] || "No documentation"
+      @name, @action = name, action
+    end
+    def call
+      @action.call
+    end
+    def describe
+      puts " #{@name} : #{@doc}"
+    end
+  end
+
   module Vocabulary
     def defword name, action
       @dictionary ||= {}
       puts "Warning: Existing definition of '#{name}' changed" if @dictionary[name]
-      @dictionary[name] = action
+      @dictionary[name] = Word.new name, action
     end 
 
     def call_word word
@@ -47,33 +61,55 @@ module Fortholito
         push a
         push b
         push a
-      }
+      }, :doc => "( a b -- a b a )"
+
       defword 'rot',   lambda {
         c, b, a = pop, pop, pop
         push b
         push c
         push a
-      }
+      }, :doc => "( a b c -- b c a )"
 
-      defword '.',      lambda { print pop }
-      defword 'cr',      lambda { puts }
-      defword 'space',      lambda { print " " }
+      defword '.',     lambda { print pop }, :doc => "( x --  ) Pop and print top value"
+      defword 'cr',    lambda { puts },      :doc => "Prints a newline"
+      defword 'space', lambda { print " " }, :doc => "Prints a space character"
 
-      defword 'rand', lambda { push rand pop }
+      defword 'rand', lambda { push rand pop }, :doc => "( n1 -- n2 )"
       
-      defword '.s'       , lambda { p @stack }
-      defword 'showstack', lambda { Fortholito.showstack = not(Fortholito.showstack) }
-      defword 'stacktrace', lambda { Fortholito.stacktrace = not(Fortholito.stacktrace) }
+      defword '.s'       , lambda { p @stack }, :doc => "Display stack once"
+      
+      defword 'showstack', 
+        lambda { Fortholito.showstack = not(Fortholito.showstack) },
+        :doc => "Use to toggle stack display on and off. Stack is displayed after each operation."
+
+      defword 'stacktrace', 
+        lambda { Fortholito.stacktrace = not(Fortholito.stacktrace) },
+        :doc => "Use to toggle verbose stack display on and off. Stack is displayed each time it is modified. This is usually more information than you need :)"
 
       defword 'words', lambda {
         @dictionary.keys.sort.each_slice(4) do |w|
           puts " " + w.map{|w| w.ljust 18}.join(" ")
+        end
+      }, :doc => "List all words in the vocabulary"
+
+      defword 'describe', lambda {
+        name = pop
+        if name
+          word = @dictionary[name] 
+          if word
+            puts word.describe
+          else
+            puts "Vocabulary contains no word named #{name}"
+          end
+        else
+          puts "No name on stack to describe"
         end
       }
 
       defword 'help', lambda {
         [ " SOME USEFULL WORDS YOU SHOULD TRY:",
           "  words       \\ display all words in the vocabulary",
+          "  describe    \\ pop word (string) and show details",
           "  .           \\ pop and print the top item from the stack",
           "  .s          \\ display stack once",
           "  showstack   \\ toggle display of stack between commands",
