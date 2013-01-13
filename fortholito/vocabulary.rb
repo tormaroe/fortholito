@@ -75,13 +75,13 @@ module Fortholito
         push a
       }, :doc => "( a b c -- b c a )"
 
-      defword '.',     lambda { print pop }, :doc => "( x --  ) Pop and print top value"
-      defword :cr,    lambda { puts },      :doc => "Prints a newline"
-      defword :space, lambda { print " " }, :doc => "Prints a space character"
+      defword '.',     lambda { output pop }, :doc => "( x --  ) Pop and print top value"
+      defword :cr,    lambda { output "\n" },      :doc => "Prints a newline"
+      defword :space, lambda { output " " }, :doc => "Prints a space character"
 
       defword :rand, lambda { push rand pop }, :doc => "( n1 -- n2 )"
       
-      defword '.s'       , lambda { p @stack }, :doc => "Display stack once"
+      defword '.s'       , lambda { output "#{@stack.inspect}\n" }, :doc => "Display stack once"
       
       defword :showstack, 
         lambda { Fortholito.showstack = not(Fortholito.showstack) },

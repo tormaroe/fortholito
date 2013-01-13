@@ -54,7 +54,9 @@ module Fortholito
         word.make_safe # assuming the tests will pass
         definition.tests.each do |test|
           test.givens.each {|given| evaluate given }
+          Fortholito.no_output = true
           word.call_unsafe
+          Fortholito.no_output = false
           result, @stack = @stack, []
           test.expectations.each {|expect| evaluate expect }
           unless @stack == result

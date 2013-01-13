@@ -22,7 +22,8 @@ module Fortholito
   # 
   class << self
     attr_accessor :showstack, 
-                  :stacktrace
+                  :stacktrace,
+                  :no_output
   end
 
   class Runtime
