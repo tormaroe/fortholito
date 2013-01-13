@@ -55,8 +55,7 @@ module Fortholito
         definition.tests.each do |test|
           test.givens.each {|given| evaluate given }
           word.call_unsafe
-          result = @stack
-          @stack = []
+          result, @stack = @stack, []
           test.expectations.each {|expect| evaluate expect }
           unless @stack == result
             word.fail
@@ -67,8 +66,8 @@ module Fortholito
           end
           @stack = []
         end
-      else
-        puts "WARNING: #{name} has no tests!"
+      #else
+      #  puts "WARNING: #{name} has no tests!"
       end
     end
   end
@@ -111,22 +110,27 @@ module Fortholito
     end
   end
 
-  ## Here we open up the Vocabulary, hook into the
-  #  initialize_vocabulary method, and add our own
+  ## Here we open up the Vocabulary and add our own
   #  code to make all currently defined words safe!
   #  
   module Vocabulary
-    alias_method :orig_initialize_vocabulary, :initialize_vocabulary
-
-    def initialize_vocabulary
-      orig_initialize_vocabulary
-      make_all_current_words_safe
-    end
-
     def make_all_current_words_safe
       @dictionary.each do |name, action|
         action.make_safe
       end
+    end
+  end
+
+  ## Finally we open up the Runtime and hook into
+  #  initialize to call the method that makes all
+  #  words safe
+  #
+  class Runtime
+    alias_method :orig_initialize, :initialize
+
+    def initialize
+      orig_initialize
+      @evaluator.make_all_current_words_safe
     end
   end
 
