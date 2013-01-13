@@ -32,10 +32,45 @@ module Fortholito
         @code[@state].push expr
       end
     end
+    def givens
+      @code[:given]
+    end
+    def expectations
+      @code[:expect]
+    end
+    def to_s
+      "#{@code[:given].map{|g| g.value}.join(" ")} #{@word}"
+    end
   end
 
   class Evaluator
-    # TODO: Extend with testing semantics
+    alias_method :orig_forth_define_word, :forth_define_word
+
+    def forth_define_word definition
+      name = definition.value
+      orig_forth_define_word definition
+      if definition.tests
+        word = getword name
+        word.make_safe # assuming the tests will pass
+        definition.tests.each do |test|
+          test.givens.each {|given| evaluate given }
+          word.call_unsafe
+          result = @stack
+          @stack = []
+          test.expectations.each {|expect| evaluate expect }
+          unless @stack == result
+            word.fail
+            puts "\n*** FAILURE testing #{name}"
+            puts "    Given: #{test}"
+            puts " expected: #{@stack.inspect}"
+            puts "  but got: #{result.inspect}"
+          end
+          @stack = []
+        end
+      else
+        puts "WARNING: #{name} has no tests!"
+      end
+    end
   end
 
   ## Here we open up the Word class and add our own
@@ -59,6 +94,10 @@ module Fortholito
       orig_call
     end
 
+    def call_unsafe
+      orig_call
+    end
+
     def describe
       orig_describe
       puts " Test extention: Verified? #{@verified}"
@@ -66,6 +105,9 @@ module Fortholito
 
     def make_safe
       @verified = true
+    end
+    def fail
+      @verified = false
     end
   end
 

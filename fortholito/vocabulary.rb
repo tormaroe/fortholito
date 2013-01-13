@@ -142,7 +142,6 @@ module Fortholito
       }
 
       defword :bye, lambda { exit 0 }, :doc => "Quit REPL"
-
     end
 
   end
