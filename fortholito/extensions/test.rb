@@ -1,7 +1,37 @@
 module Fortholito
 
-  class Parser
-    # TODO: Extend with testing syntax
+  class WordDefinitionExpression
+    attr_reader :tests
+    alias_method :orig_push, :push
+
+    def push expr
+      if expr.token.is_word? "<EXAMPLE>"
+        @tests ||= []
+        @tests.push WordTest.new self.value
+
+      elsif @tests
+        @tests.last.push expr
+
+      else
+        orig_push expr
+      end
+    end
+  end
+
+  class WordTest
+    def initialize word
+      @word = word
+      @code = {:given => [], :expect => []}
+      @state = :given
+    end
+    def push expr
+      return if expr.token.is_word? "given:"
+      if expr.token.is_word? "expect:"
+        @state = :expect
+      else
+        @code[@state].push expr
+      end
+    end
   end
 
   class Evaluator
