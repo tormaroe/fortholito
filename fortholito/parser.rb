@@ -2,6 +2,12 @@ module Fortholito
   
   RESERVED_WORDS = %w(if then : ; begin until repeat)
 
+  class UnexpectedEndOfFileError < RuntimeError
+    def initialize msg="Unexpected EOF while parsing"
+      super msg
+    end
+  end
+
   class Parser
     attr_reader :ast
     def initialize tokens
@@ -12,7 +18,7 @@ module Fortholito
     end
     def build_ast
       expression until eof
-      raise "EOF not expected!" if @parser_stack.size > 1
+      raise UnexpectedEndOfFileError.new if @parser_stack.size > 1
     end
 
     def expression

@@ -1,5 +1,7 @@
 module Fortholito
 
+  # TODO: Test output
+
   class WordDefinitionExpression
     attr_reader :tests
     alias_method :orig_push, :push

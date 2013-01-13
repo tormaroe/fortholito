@@ -7,6 +7,7 @@ module Fortholito
       @prompt = options[:prompt] || "FORTH> "
       @do_splash = true
       @source = []
+      @read_buffer = ""
     end
     
     def run
@@ -26,12 +27,14 @@ module Fortholito
     end
 
     def read
-      Kernel.print @prompt
-      STDIN.gets.chomp
+      Kernel.print (if @continuation_prompt then "... " else @prompt end)
+      @read_buffer += " " + STDIN.gets.chomp
     end
 
     def eval input
       @runtime.eval input
+      @read_buffer = ""
+      @continuation_prompt = false
     end
 
     def print
@@ -42,6 +45,8 @@ module Fortholito
       while true
         begin
           yield
+        rescue UnexpectedEndOfFileError 
+          @continuation_prompt = true
         rescue Exception => e
           exit 0 if e.class == ::SystemExit
           puts "#{e.inspect}"
