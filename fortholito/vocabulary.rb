@@ -21,8 +21,12 @@ module Fortholito
       @dictionary[name] = Word.new name, action, options
     end 
 
+    def getword word
+      @dictionary[(if word.class == ::Symbol then word.to_s else word end)]
+    end
+
     def call_word word
-      action = @dictionary[(if word.class == ::Symbol then word.to_s else word end)]  
+      action = getword word
       raise "Word '#{word}' undefined!" unless action
       action.call
     end
