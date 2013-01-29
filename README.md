@@ -19,7 +19,24 @@ FORTHolito (or FORTH basically) makes for some nice tests when all you do is ope
 
 ###Try it out###
 
-FORTHolito is a small and limited language. But if you're just curious about FORTH, or want to see how you can implement a simple language in Ruby, you should clone it and fire up the REPL. This is what you'll see:
+FORTHolito is a small and limited language. But if you're just curious about FORTH, or want to see how you can implement a simple language in Ruby, you should clone it and fire up the REPL. 
+
+FORTHolito have some basic options. Run it with *--help* to see how it's used:
+
+    C:\dev\fortholito [master]> .\fortholito --help
+    Usage:
+
+      FORTHolito [options] [files]
+
+    Options:
+      --eval <code>         Evaluate code. Everything after --eval
+                            is considered FORTHolito code. Code is
+                            evaluated after files.
+      --extend <extension>  Load an extension by name. Extensions
+                            are loaded before files.
+      --help                Display this help and exit.
+
+When you enter the REPL this is what you'll see:
 
     C:\dev\fortholito [master]> .\fortholito
     Welcome to FORTHolito version 0.2 by @tormaroe
@@ -59,6 +76,8 @@ To get a feel for how much (or how little) of FORTH I've implemented in FORTHoli
      swap               true               tuck               within
      words
     ok
+
+In addition to the words there are some constructs like *if* and iteration using *begin..until* and *begin..while..repeat*. You should have a look in the examples directory as well as the spec.rb file to learn more.
 
 As a treat to Ruby developers I've also made it possible to drop into Ruby inside strings.
 
