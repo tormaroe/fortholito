@@ -89,6 +89,6 @@ As a treat to Ruby developers I've also made it possible to drop into Ruby insid
 
 ###Final thoughs###
 
-FORTHolito hasn't become all I hoped it would be. I had big plans for the test extension when I started - it would become this great, interactive development environment for producing perfectly tested and safe code.
+FORTHolito hasn't become all I hoped it would be. I had big plans for the test extension when I started - it would become this great, interactive development environment for producing perfectly tested and safe code. I still believe my vision is possible, and possibly even useful, but it would take more time.
 
 The drive and passion I had in the beginning has dissipated for now. But it was great fun while it lasted - and maybe some day I'll pick up where I left off. Either way I did manage to enter into the [PLT Games](http://www.pltgames.com/competition/2013/1) again.
