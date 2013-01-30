@@ -1,8 +1,8 @@
 FORTHolito is a programming language - specifically an (incomplete) implementation of the [FORTH](http://en.wikipedia.org/wiki/Forth_%28programming_language%29) programming language - made just for fun and for the learning experience. The interpreter is implemented in Ruby, and it has an interactive REPL.
 
-But it's more! It's my entry to the [PLT Games: Testing the Waters](http://www.pltgames.com/competition/2013/1) competition. I made it possible to write extensions to FORTHolito, and then wrote a **test extension**.
+But it's more! It's my entry into the [PLT Games: Testing the Waters](http://www.pltgames.com/competition/2013/1) competition. I made it possible to write extensions to FORTHolito, and then wrote a **test extension**.
 
-When you run FORTHolito with this extension all word you define **have to** include one or more tests - working examples of how the word operates.
+When you run FORTHolito with this extension all words you define **have to** include one or more tests - working examples of how the word operates.
 
 Here's an example of a word definition in FORTHolito:
 
